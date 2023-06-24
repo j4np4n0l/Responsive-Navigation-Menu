@@ -1,0 +1,340 @@
+<style>
+:root {
+    /** USER-DEFINED VARIABLES **/
+
+    /* NAVIGATION */
+    --nav-color: #353535;
+    --nav-padding: 1.5rem 5%;
+    
+    /* LOGO WIDTH */
+    --logo_width: 200px;
+
+    /* MENU FONT */
+    --menu_font: 'Montserrat',Helvetica,Arial,Lucida,sans-serif;
+    
+    /* MENU COLOR PALETTE */
+    --menu_link_color: #ffffff !important;
+    --active_link_color: #ff0000 !important;
+    --menu_link_color_hover: #b4b4b4 !important;
+    
+    /* MENU LINK SPACING */
+    --space_gap:  1.5rem;
+    
+    /* MOBILE MENU BACKGROUND */
+    --black: 0 0% 0%;
+    --white: 0 0% 100%;
+    --opacity: 0.7;
+    --blur_depth: 0.4rem;
+    --menu_vertical_background: hsl( var(--black) / var(--opacity) );
+    
+    /* SUBMENU TOP SPACING */
+    --top_spacing: 5px;
+    
+    /* MOBILE MENU ICON */
+    --menu_icon_color: #ffffff;
+    --menu_icon_color_hover: #ff0000;
+    --menu_icon_size: 2rem;
+    
+   /** ------------------------ **/
+}
+
+body {
+  overflow-x: hidden;
+  margin: 0;
+}
+
+#section_nav {
+  background-color: var(--nav-color);
+  padding: var(--nav-padding, 1.5rem 5%);
+}
+  
+.flex {
+  display: flex;
+}
+div.primary_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  padding: 0;
+}
+
+img.nav_logo {
+  width: var(--logo_width, 200px);
+  transition: .3s ease;
+}
+img.nav_logo:hover {
+  transform: scale(1.03);
+}
+
+.screen_reader_only {
+  display: none;
+}
+.mobile_nav_toggle {
+  display: none;
+}
+
+nav.custom_navbar {
+  display: flex;
+  align-items: center;
+}
+
+ul#primary_nav {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: var(--space_gap);
+  list-style: none;
+}
+
+ul#primary_nav li a {
+  text-decoration: none;
+  font-family: var(--menu_font, inherit);
+  font-size: 1rem;
+  color: var(--menu_link_color);
+  position: relative;
+  transition: .3s ease;
+}
+
+ul#primary_nav li a:hover {
+  color: var(--menu_link_color_hover, var(--menu_link_color));
+  transform: scale(1.2);
+}
+ul#primary_nav li a::before{
+  content: '';
+  position: absolute;
+  bottom: -0.5rem;
+  right: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--menu_link_color_hover, var(--menu_link_color));
+  transition: width 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+@media (hover: hover) and (pointer: fine) {
+  ul#primary_nav li a:hover::before{
+    left: 0;
+    right: auto;
+    width: 100%;
+  }
+}
+
+ul#primary_nav li a.current_page {
+  color: var(--active_link_color);
+}
+
+ul#primary_nav .sub_menu {
+  list-style-type: none;
+  display: flex;
+  margin: 0;
+  flex-direction: column;
+  gap: 12px;
+  position: absolute;
+  background: hsl( var(--black) / calc(var(--opacity) + 0.2 ) );
+  padding: 30px;
+  opacity: 0;
+  transform: translate(-15%, -70%);
+  height: 0;
+  transition: all .3s ease;
+}
+/* IF BROWSER SUPPORTS */
+@supports ( backdrop-filter: blur(var(--blur_depth)) ) {
+  ul#primary_nav .sub_menu {
+    backdrop-filter: blur(var(--blur_depth));     
+    background: var(--menu_vertical_background);
+  }
+}
+ul#primary_nav .sub_menu a {
+  font-size: 0;
+  font-family: var(--menu_font, inherit);
+  transition: all .3s ease;
+}
+ul#primary_nav > li:hover .sub_menu {
+  opacity: 1;
+  transform: translateY(0);
+  margin-top: var(--top_spacing);
+  height: auto;
+}
+ul#primary_nav > li:hover .sub_menu a {
+  font-size: inherit; 
+}
+
+/** MOBILE MENU GOES HERE **/
+@media (max-width: 900px) {
+  ul#primary_nav .sub_menu {
+    height: auto;
+    font-size: inherit; 
+    position: static;
+    margin: 0;
+    opacity: 1;
+    transform: translateY(0);
+    margin-top: 5px;
+    background: hsl(0 0% 0% / 0);
+    padding: 0.5rem 0 0 1rem;
+  }
+  /* IF BROWSER SUPPORTS */
+  @supports ( backdrop-filter: blur(0) ) {
+    ul#primary_nav .sub_menu {
+      backdrop-filter: blur(0);     
+      background: hsl(0 0% 0% / 0);
+    }
+  }
+  ul#primary_nav .sub_menu a {
+    font-size: inherit; 
+  }
+
+  img.nav_logo {
+    width: calc(var(--logo_width) - 10%);
+  } 
+
+  ul#primary_nav {
+    gap: 1.2em;
+    position: fixed;
+    z-index: 990;
+    inset: 0 0 0 60%;
+    flex-direction: column;
+    padding: min(30vh, 10rem) 2rem;
+    background: hsl( var(--black) / calc(var(--opacity) + 0.2 ) );
+    box-shadow: 0 0 10px 3px hsl(0 0% 0% / 0.3);
+    transform: translateX(100%);
+    transition: .3s ease;
+  }
+
+  /* IF BROWSER SUPPORTS */
+  @supports ( backdrop-filter: blur(var(--blur_depth)) ) {
+    ul#primary_nav {
+      backdrop-filter: blur(var(--blur_depth));     
+      background: var(--menu_vertical_background);
+    }
+  }
+
+  ul#primary_nav[data-visible="true"]{
+    transform: translateX(0%);
+  }
+
+  button.mobile_nav_toggle {
+    outline-color: hsl(0 0% 0% / 0) !important;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    z-index: 999;
+    border: none;
+    background: transparent;
+    aspect-ratio: 1;
+    right: 2rem;
+    cursor: pointer;
+  }
+  svg.menu_icon {
+    fill: var(--menu_icon_color);
+    height: var(--menu_icon_size);
+    transform: rotate(0deg);
+    transition: .3s ease;
+  }
+  svg.menu_icon:hover {
+    fill: var(--menu_icon_color_hover);
+  }
+  .icon_path {
+    transition: .3s ease;
+  }
+
+}
+
+@media (max-width: 800px) {
+  ul#primary_nav {
+    inset: 0 0 0 40%;
+  }
+}
+
+@media (max-width: 600px) {
+  ul#primary_nav {
+    inset: 0 0 0 30%;
+  }
+}
+
+@media (max-width: 400px) {
+  ul#primary_nav {
+    inset: 0 0 0 0%;
+  }
+  img.nav_logo {
+    width: calc(var(--logo_width) - 20%);
+  }
+}
+</style>
+
+<section id="section_nav">
+<div class="primary_header">
+  <div>
+    <a class="flex" href="/">
+      <img alt="header logo" class="nav_logo" src="https://freeiconshop.com/wp-content/themes/icon-shop/images/logo-new.png"/>
+    </a>
+  </div>
+  
+  <button class="mobile_nav_toggle" aria-controls="primary_nav">
+    <svg class="menu_icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path class="icon_path" d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg>
+    <span class="screen_reader_only">Menu</span>
+  </button>
+  
+  <nav class="custom_navbar">
+    <ul id="primary_nav" class="primary_nav" data-visible="false">
+      <li>
+        <a class="menu_link" href="/test-page/">HOME</a>
+      </li>
+      <li>
+        <a class="menu_link" href="/about-page/">ABOUT</a>
+        <ul class="sub_menu">
+          <li><a class="menu_link" href="#">LINK ONE</a></li>
+          <li><a class="menu_link" href="/test-page/">LINK TWO</a></li>
+          <li><a class="menu_link" href="#">LINK THREE</a></li>
+        </ul>
+      </li>
+      <li>
+        <a class="menu_link" href="#">ITEM ONE</a>
+      </li>
+      <li>
+        <a class="menu_link" href="#">ITEM TWO</a>
+      </li>
+      <li>
+        <a class="menu_link" href="/contact-page/">CONTACT</a>
+      </li>
+    </ul>
+  </nav>
+</div>
+</section>
+
+<script>
+  mobileNavigationToggle();
+  activeLink();
+  
+  function mobileNavigationToggle() {
+    const primaryNav = document.querySelector('.primary_nav');
+    const navToggle = document.querySelector('.mobile_nav_toggle');
+    const menuIcon = document.querySelector('.menu_icon');
+    const iconPath = document.querySelector('.icon_path');
+
+    navToggle.addEventListener('click', () => {
+      const visibility = primaryNav.getAttribute('data-visible');
+
+      if (visibility === "false") {
+        primaryNav.setAttribute('data-visible', true);
+        menuIcon.style.transform = 'rotate(180deg)';
+        iconPath.setAttribute('d', 'M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z');
+      } else {
+        primaryNav.setAttribute('data-visible', false);
+        menuIcon.style.transform = 'rotate(0deg)';
+        iconPath.setAttribute('d', 'M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z');
+      }
+    });
+  }
+  
+  function activeLink() {
+    const currentPath = window.location.pathname;
+    const menuLinks = document.querySelectorAll('.menu_link');
+    
+    menuLinks.forEach((link) => {
+      const linkPath = link.getAttribute('href');
+      
+      if (linkPath === currentPath) {
+        link.classList.add('current_page');
+      }
+    });
+  }
+</script>
